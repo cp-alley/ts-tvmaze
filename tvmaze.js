@@ -10789,6 +10789,8 @@ var DEFAULT_IMG_URL = "https://store-images.s-microsoft.com/image/apps.65316.135
  *    Each show object should contain exactly: {id, name, summary, image}
  *    (if no image URL given by API, put in a default image URL)
  */
+//TODO: ShowResultInterface
+// Do image logic in this function
 function searchShowsByTerm(term) {
     return __awaiter(this, void 0, void 0, function () {
         var params, response, completeShowData, showData;

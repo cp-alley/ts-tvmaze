@@ -15,6 +15,14 @@ interface ShowInterface {
   summary: string;
   image: { original: string, medium: string; } | null;
 }
+interface ShowResultInterface {
+  show: {
+    id: number;
+    name: string;
+    summary: string;
+    image: { original: string, medium: string; } | null;
+  }
+}
 
 /** Given a search term, search for tv shows that match that query.
  *
@@ -22,11 +30,12 @@ interface ShowInterface {
  *    Each show object should contain exactly: {id, name, summary, image}
  *    (if no image URL given by API, put in a default image URL)
  */
-
+//TODO: ShowResultInterface
+// Do image logic in this function
 async function searchShowsByTerm(term: string): Promise<ShowInterface[]> {
   const params = new URLSearchParams({ q: term });
   const response = await fetch(`${BASE_API_URL}/search/shows?${params}`);
-  const completeShowData = await response.json() as { show: ShowInterface; }[];
+  const completeShowData = await response.json() as ShowResultInterface[];
 
   const showData = completeShowData.map(show => ({
     id: show.show.id,
@@ -72,7 +81,7 @@ function populateShows(shows: ShowInterface[]): void {
  *    Hide episodes area (that only gets shown if they ask for episodes)
  */
 
-async function searchForShowAndDisplay() {
+async function searchForShowAndDisplay(): Promise<void> {
   const term = $("#searchForm-term").val();
 
   let shows;
@@ -83,7 +92,7 @@ async function searchForShowAndDisplay() {
   }
 }
 
-$searchForm.on("submit", async function (evt) {
+$searchForm.on("submit", async function (evt: JQuery.SubmitEvent) {
   evt.preventDefault();
   await searchForShowAndDisplay();
 });
@@ -134,7 +143,7 @@ function populateEpisodes(episodes: EpisodeInterface[]): void {
  *
  *  Get list of episodes to display
  */
-async function handleClick(evt: any) {
+async function handleClick(evt: JQuery.ClickEvent): Promise<void> {
   const $button = evt.target;
   const showId = $button.closest(".Show").dataset.showId;
 
