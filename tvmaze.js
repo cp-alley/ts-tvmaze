@@ -10883,6 +10883,7 @@ function getEpisodesOfShow(id) {
 }
 /** Write a clear docstring for this function... */
 function populateEpisodes(episodes) {
+    console.log("ran populate episodes");
     $episodesArea.empty();
     for (var _i = 0, episodes_1 = episodes; _i < episodes_1.length; _i++) {
         var episode = episodes_1[_i];
@@ -10898,11 +10899,11 @@ function handleClick(evt) {
             switch (_a.label) {
                 case 0:
                     $button = evt.target;
-                    showId = $button.attr("data-show-id").data("show-id");
-                    console.log("show id", showId);
+                    showId = $button.closest(".Show").dataset.showId;
                     return [4 /*yield*/, getEpisodesOfShow(showId)];
                 case 1:
                     episodes = _a.sent();
+                    console.log("episodes=", episodes);
                     populateEpisodes(episodes);
                     return [2 /*return*/];
             }

@@ -7,13 +7,13 @@ const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 
 const BASE_API_URL = "http://api.tvmaze.com";
-const DEFAULT_IMG_URL = "https://store-images.s-microsoft.com/image/apps.65316.13510798887490672.6e1ebb25-96c8-4504-b714-1f7cbca3c5ad.f9514a23-1eb8-4916-a18e-99b1a9817d15?mode=scale&q=90&h=300&w=300"
+const DEFAULT_IMG_URL = "https://store-images.s-microsoft.com/image/apps.65316.13510798887490672.6e1ebb25-96c8-4504-b714-1f7cbca3c5ad.f9514a23-1eb8-4916-a18e-99b1a9817d15?mode=scale&q=90&h=300&w=300";
 
-interface ShowInterface{
+interface ShowInterface {
   id: number;
   name: string;
   summary: string;
-  image: {original: string, medium: string} | null;
+  image: { original: string, medium: string; } | null;
 }
 
 
@@ -29,7 +29,7 @@ async function searchShowsByTerm(term: string): Promise<ShowInterface[]> {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
   const params = new URLSearchParams({ q: term });
   const response = await fetch(`${BASE_API_URL}/search/shows?${params}`);
-  const completeShowData = await response.json() as {show: ShowInterface }[];
+  const completeShowData = await response.json() as { show: ShowInterface; }[];
 
   const showData = completeShowData.map(show => ({
     id: show.show.id,
@@ -44,7 +44,7 @@ async function searchShowsByTerm(term: string): Promise<ShowInterface[]> {
 
 /** Given list of shows, create markup for each and to DOM */
 
-function populateShows(shows:ShowInterface[]):void {
+function populateShows(shows: ShowInterface[]): void {
   $showsList.empty();
 
   for (let show of shows) {
@@ -106,7 +106,7 @@ interface EpisodeInterface {
 }
 
 
-async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]>{
+async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]> {
   const response = await fetch(`${BASE_API_URL}/shows/${id}/episodes`);
   const completeEpisodeData = await response.json() as EpisodeInterface[];
 
@@ -115,7 +115,7 @@ async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]>{
     name: episode.name,
     season: episode.season,
     number: episode.number,
-}));
+  }));
 
   return episodes;
 }
@@ -123,7 +123,7 @@ async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]>{
 /** Write a clear docstring for this function... */
 
 function populateEpisodes(episodes: EpisodeInterface[]): void {
-
+  console.log("ran populate episodes")
   $episodesArea.empty();
 
   for (let episode of episodes) {
@@ -141,10 +141,10 @@ async function handleClick(evt: any) {
   // call for episodes (fetch)
 
   const $button = evt.target;
-  const showId = $button.attr("data-show-id").data("show-id");
-  console.log("show id", showId);
+  const showId = $button.closest(".Show").dataset.showId;
 
   const episodes = await getEpisodesOfShow(showId);
+  console.log("episodes=", episodes)
   populateEpisodes(episodes);
 }
 
