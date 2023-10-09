@@ -16,8 +16,6 @@ interface ShowInterface {
   image: { original: string, medium: string; } | null;
 }
 
-
-
 /** Given a search term, search for tv shows that match that query.
  *
  *  Returns (promise) array of show objects: [show, show, ...].
@@ -26,7 +24,6 @@ interface ShowInterface {
  */
 
 async function searchShowsByTerm(term: string): Promise<ShowInterface[]> {
-  // ADD: Remove placeholder & make request to TVMaze search shows API.
   const params = new URLSearchParams({ q: term });
   const response = await fetch(`${BASE_API_URL}/search/shows?${params}`);
   const completeShowData = await response.json() as { show: ShowInterface; }[];
@@ -95,8 +92,6 @@ $searchForm.on("submit", async function (evt) {
 /** Given a show ID, get from API and return (promise) array of episodes:
  *      { id, name, season, number }
  */
-// http://api.tvmaze.com/shows/:id/episodes
-
 
 interface EpisodeInterface {
   id: number;
@@ -105,6 +100,7 @@ interface EpisodeInterface {
   number: number;
 }
 
+/** Given show id, fetch epsidoes list for that show from API */
 
 async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]> {
   const response = await fetch(`${BASE_API_URL}/shows/${id}/episodes`);
@@ -120,10 +116,9 @@ async function getEpisodesOfShow(id: number): Promise<EpisodeInterface[]> {
   return episodes;
 }
 
-/** Write a clear docstring for this function... */
+/** Given a list of episodes, clear episodes list and add new episodes to the DOM */
 
 function populateEpisodes(episodes: EpisodeInterface[]): void {
-  console.log("ran populate episodes")
   $episodesArea.empty();
 
   for (let episode of episodes) {
@@ -135,19 +130,17 @@ function populateEpisodes(episodes: EpisodeInterface[]): void {
   $episodesArea.show();
 }
 
+/** Event handler for Episodes button
+ *
+ *  Get list of episodes to display
+ */
 async function handleClick(evt: any) {
-  // evt is a button click
-  // get the right div, extract id from it
-  // call for episodes (fetch)
-
   const $button = evt.target;
   const showId = $button.closest(".Show").dataset.showId;
 
   const episodes = await getEpisodesOfShow(showId);
-  console.log("episodes=", episodes)
+
   populateEpisodes(episodes);
 }
-
-
 
 $showsList.on('click', 'button', handleClick);

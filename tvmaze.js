@@ -10859,6 +10859,7 @@ $searchForm.on("submit", function (evt) {
         });
     });
 });
+/** Given show id, fetch epsidoes list for that show from API */
 function getEpisodesOfShow(id) {
     return __awaiter(this, void 0, void 0, function () {
         var response, completeEpisodeData, episodes;
@@ -10881,9 +10882,8 @@ function getEpisodesOfShow(id) {
         });
     });
 }
-/** Write a clear docstring for this function... */
+/** Given a list of episodes, clear episodes list and add new episodes to the DOM */
 function populateEpisodes(episodes) {
-    console.log("ran populate episodes");
     $episodesArea.empty();
     for (var _i = 0, episodes_1 = episodes; _i < episodes_1.length; _i++) {
         var episode = episodes_1[_i];
@@ -10892,6 +10892,10 @@ function populateEpisodes(episodes) {
     }
     $episodesArea.show();
 }
+/** Event handler for Episodes button
+ *
+ *  Get list of episodes to display
+ */
 function handleClick(evt) {
     return __awaiter(this, void 0, void 0, function () {
         var $button, showId, episodes;
@@ -10903,7 +10907,6 @@ function handleClick(evt) {
                     return [4 /*yield*/, getEpisodesOfShow(showId)];
                 case 1:
                     episodes = _a.sent();
-                    console.log("episodes=", episodes);
                     populateEpisodes(episodes);
                     return [2 /*return*/];
             }
