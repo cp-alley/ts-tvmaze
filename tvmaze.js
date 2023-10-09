@@ -10826,27 +10826,90 @@ function populateShows(shows) {
 /** Handle search form submission: get shows from API and display.
  *    Hide episodes area (that only gets shown if they ask for episodes)
  */
-// async function searchForShowAndDisplay() {
-//   const term = $("#searchForm-term").val();
-//   const shows = await searchShowsByTerm(term);
-//   $episodesArea.hide();
-//   populateShows(shows);
-// }
-// $searchForm.on("submit", async function (evt) {
-//   evt.preventDefault();
-//   await searchForShowAndDisplay();
-// });
-/** Given a show ID, get from API and return (promise) array of episodes:
- *      { id, name, season, number }
- */
-// http://api.tvmaze.com/shows/:id/episodes
+function searchForShowAndDisplay() {
+    return __awaiter(this, void 0, void 0, function () {
+        var term, shows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    term = $("#searchForm-term").val();
+                    if (!(typeof term === 'string')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, searchShowsByTerm(term)];
+                case 1:
+                    shows = _a.sent();
+                    $episodesArea.hide();
+                    populateShows(shows);
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
+            }
+        });
+    });
+}
+$searchForm.on("submit", function (evt) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    evt.preventDefault();
+                    return [4 /*yield*/, searchForShowAndDisplay()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+});
 function getEpisodesOfShow(id) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
+    return __awaiter(this, void 0, void 0, function () {
+        var response, completeEpisodeData, episodes;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("".concat(BASE_API_URL, "/shows/").concat(id, "/episodes"))];
+                case 1:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    completeEpisodeData = _a.sent();
+                    episodes = completeEpisodeData.map(function (episode) { return ({
+                        id: episode.id,
+                        name: episode.name,
+                        season: episode.season,
+                        number: episode.number,
+                    }); });
+                    return [2 /*return*/, episodes];
+            }
+        });
+    });
 }
 /** Write a clear docstring for this function... */
-// function populateEpisodes(episodes) { }
+function populateEpisodes(episodes) {
+    $episodesArea.empty();
+    for (var _i = 0, episodes_1 = episodes; _i < episodes_1.length; _i++) {
+        var episode = episodes_1[_i];
+        var $episode = $("<li>".concat(episode.name, " (Season ").concat(episode.season, ", Number ").concat(episode.number, ")</li>"));
+        $episodesArea.append($episode);
+    }
+    $episodesArea.show();
+}
+function handleClick(evt) {
+    return __awaiter(this, void 0, void 0, function () {
+        var $button, showId, episodes;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    $button = evt.target;
+                    showId = $button.attr("data-show-id").data("show-id");
+                    console.log("show id", showId);
+                    return [4 /*yield*/, getEpisodesOfShow(showId)];
+                case 1:
+                    episodes = _a.sent();
+                    populateEpisodes(episodes);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+$showsList.on('click', 'button', handleClick);
 
 
 /***/ })
