@@ -10790,7 +10790,7 @@ var BASE_API_URL = "http://api.tvmaze.com";
  */
 function searchShowsByTerm(term) {
     return __awaiter(this, void 0, void 0, function () {
-        var params, response, showData;
+        var params, response, completeShowData, showData;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -10800,13 +10800,14 @@ function searchShowsByTerm(term) {
                     response = _a.sent();
                     return [4 /*yield*/, response.json()];
                 case 2:
-                    showData = _a.sent();
-                    return [2 /*return*/, showData.map(function (show) { return ({
-                            id: show.show.id,
-                            name: show.show.name,
-                            summary: show.show.summary,
-                            image: show.show.image.original
-                        }); })];
+                    completeShowData = _a.sent();
+                    showData = completeShowData.map(function (show) { return ({
+                        id: show.show.id,
+                        name: show.show.name,
+                        summary: show.show.summary,
+                        image: show.show.image.original
+                    }); });
+                    return [2 /*return*/, showData];
             }
         });
     });

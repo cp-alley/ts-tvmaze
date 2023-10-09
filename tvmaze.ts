@@ -13,6 +13,7 @@ interface Show{
   name: string;
   summary: string;
   image?: string;
+
 }
 
 /** Given a search term, search for tv shows that match that query.
@@ -22,18 +23,20 @@ interface Show{
  *    (if no image URL given by API, put in a default image URL)
  */
 
-async function searchShowsByTerm(term:string): Promise<Show[]> {
+async function searchShowsByTerm(term: string): Promise<Show[]> {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
   const params = new URLSearchParams({ q: term });
   const response = await fetch(`${BASE_API_URL}/search/shows?${params}`);
-  const showData= await response.json();
+  const completeShowData = await response.json();
 
-  return showData.map(show => ({
+  const showData = completeShowData.map(show => ({
     id: show.show.id,
     name: show.show.name,
     summary: show.show.summary,
     image: show.show.image.original
+
   }));
+  return showData;
 }
 
 
