@@ -10782,6 +10782,7 @@ var $showsList = $("#showsList");
 var $episodesArea = $("#episodesArea");
 var $searchForm = $("#searchForm");
 var BASE_API_URL = "http://api.tvmaze.com";
+var DEFAULT_IMG_URL = "https://store-images.s-microsoft.com/image/apps.65316.13510798887490672.6e1ebb25-96c8-4504-b714-1f7cbca3c5ad.f9514a23-1eb8-4916-a18e-99b1a9817d15?mode=scale&q=90&h=300&w=300";
 /** Given a search term, search for tv shows that match that query.
  *
  *  Returns (promise) array of show objects: [show, show, ...].
@@ -10805,7 +10806,7 @@ function searchShowsByTerm(term) {
                         id: show.show.id,
                         name: show.show.name,
                         summary: show.show.summary,
-                        image: show.show.image.original
+                        image: show.show.image
                     }); });
                     return [2 /*return*/, showData];
             }
@@ -10814,51 +10815,36 @@ function searchShowsByTerm(term) {
 }
 /** Given list of shows, create markup for each and to DOM */
 function populateShows(shows) {
+    var _a;
     $showsList.empty();
     for (var _i = 0, shows_1 = shows; _i < shows_1.length; _i++) {
         var show = shows_1[_i];
-        var $show = $("<div data-show-id=\"".concat(show.id, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=\"http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg\"\n              alt=\"Bletchly Circle San Francisco\"\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show.name, "</h5>\n             <div><small>").concat(show.summary, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
+        var $show = $("<div data-show-id=\"".concat(show.id, "\" class=\"Show col-md-12 col-lg-6 mb-4\">\n         <div class=\"media\">\n           <img\n              src=\"").concat(((_a = show.image) === null || _a === void 0 ? void 0 : _a.medium) || DEFAULT_IMG_URL, "\"\n              alt=\"A picture of ").concat(show.name, "\"\n              class=\"w-25 me-3\">\n           <div class=\"media-body\">\n             <h5 class=\"text-primary\">").concat(show.name, "</h5>\n             <div><small>").concat(show.summary, "</small></div>\n             <button class=\"btn btn-outline-light btn-sm Show-getEpisodes\">\n               Episodes\n             </button>\n           </div>\n         </div>\n       </div>\n      "));
         $showsList.append($show);
     }
 }
 /** Handle search form submission: get shows from API and display.
  *    Hide episodes area (that only gets shown if they ask for episodes)
  */
-function searchForShowAndDisplay() {
-    return __awaiter(this, void 0, void 0, function () {
-        var term, shows;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    term = $("#searchForm-term").val();
-                    return [4 /*yield*/, searchShowsByTerm(term)];
-                case 1:
-                    shows = _a.sent();
-                    $episodesArea.hide();
-                    populateShows(shows);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-$searchForm.on("submit", function (evt) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    evt.preventDefault();
-                    return [4 /*yield*/, searchForShowAndDisplay()];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-});
+// async function searchForShowAndDisplay() {
+//   const term = $("#searchForm-term").val();
+//   const shows = await searchShowsByTerm(term);
+//   $episodesArea.hide();
+//   populateShows(shows);
+// }
+// $searchForm.on("submit", async function (evt) {
+//   evt.preventDefault();
+//   await searchForShowAndDisplay();
+// });
 /** Given a show ID, get from API and return (promise) array of episodes:
  *      { id, name, season, number }
  */
-// async function getEpisodesOfShow(id) { }
+// http://api.tvmaze.com/shows/:id/episodes
+function getEpisodesOfShow(id) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
 /** Write a clear docstring for this function... */
 // function populateEpisodes(episodes) { }
 
