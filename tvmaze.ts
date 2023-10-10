@@ -30,12 +30,12 @@ interface ShowResultInterface {
  *    Each show object should contain exactly: {id, name, summary, image}
  *    (if no image URL given by API, put in a default image URL)
  */
-//TODO: ShowResultInterface
+
 // Do image logic in this function
 async function searchShowsByTerm(term: string): Promise<ShowInterface[]> {
   const params = new URLSearchParams({ q: term });
   const response = await fetch(`${BASE_API_URL}/search/shows?${params}`);
-  const completeShowData = await response.json() as ShowResultInterface[];
+  const completeShowData: ShowResultInterface[] = await response.json()
 
   const showData = completeShowData.map(show => ({
     id: show.show.id,
